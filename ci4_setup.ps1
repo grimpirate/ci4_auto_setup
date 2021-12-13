@@ -43,8 +43,13 @@ php -r "unlink('composer.phar');"
 
 ((Get-Content -Path .\$sub\app\Config\Logger.php -Raw) -replace 'threshold = 4;', 'threshold = 9;') | Set-Content -Path .\$sub\app\Config\Logger.php
 
+((Get-Content -Path .\$sub\app\Config\App.php -Raw) -replace 'America/Chicago', 'America/New_York') | Set-Content -Path .\$sub\app\Config\App.php
+
 ###############################
-((Get-Content -Path .\$sub\app\Config\Routes.php -Raw) -replace 'routes->get', 'routes->resource(''api''); $routes->get') | Set-Content -Path .\$sub\app\Config\Routes.php
+((Get-Content -Path .\$sub\app\Config\Routes.php -Raw) -replace 'routes->get', @"
+routes->resource('api');
+`$routes->get
+"@) | Set-Content -Path .\$sub\app\Config\Routes.php
 
 Out-File -FilePath .\$sub\app\Controllers\Api.php -Encoding ASCII -InputObject @"
 <?php
