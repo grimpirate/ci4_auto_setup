@@ -2,8 +2,8 @@
 	CodeIgniter 4 Setup Script
 #>
 
-$main = $args[0]
-$sub = $args[1]
+$main = Read-Host "Root directory name"
+$sub = Read-Host "Application directory name"
 $url = "http://localhost/$main/$sub/public"
 $log = "$(Get-Location)\$main\writable\logs"
 
@@ -60,6 +60,12 @@ class Api extends ResourceController
 	public function index()
 	{
 		return `$this->failTooManyRequests();
+		//return `$this->failUnauthorized();
+		//return `$this->failForbidden();
+		//return `$this->failNotFound();
+		//return `$this->failValidationError();
+		//return `$this->failResourceExists();
+		//return `$this->failResourceGone();
 	}
 }
 "@
@@ -84,7 +90,7 @@ class Home extends BaseController
 			`$stack = HandlerStack::create();
 			`$stack->push(GuzzleRetryMiddleware::factory([
 				'retry_on_status' => [400,401,402,403,404,405,406,407,408,409,410,411,412,413,414,415,416,417,418,421,422,423,424,425,426,428,429,431,451,500,501,502,503,504,505,506,507,508,510,511],
-				'max_retry_attempts' => 5,
+				'max_retry_attempts' => 3,
 				'on_retry_callback' => function(int `$attemptNumber, float `$delay, RequestInterface &`$request, array &`$options, ?ResponseInterface `$response) {
 					
 					log_message('info', sprintf(
@@ -96,7 +102,7 @@ class Home extends BaseController
 					));
 				}
 			]));
-			(new Client(['handler' => `$stack]))->get('http://localhost/bar/foo/public/api');
+			(new Client(['handler' => `$stack]))->get('$url/api');
 		}
 		catch(\Exception `$e)
 		{
