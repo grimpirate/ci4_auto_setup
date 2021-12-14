@@ -15,6 +15,4 @@ Resultant directory structure:
   /writable
   composer.json
   composer.lock
-  phpunit.xml.dist
-  spark
 ```
