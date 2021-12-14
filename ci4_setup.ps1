@@ -335,7 +335,7 @@ if(-not ([string]::IsNullOrWhiteSpace($vu)))
 	Format-Block " " $length
 	Format-Block "Windows Host(s) File:" $length
 	Format-Block "   C:\Windows\System32\drivers\etc\hosts" $length
-	Format-Block "   $vi $vu"
+	Format-Block "   $vi $vu" $length
 }
 Format-Block " " $length
 Format-Block "" $length
