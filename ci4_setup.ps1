@@ -2,8 +2,35 @@
 	CodeIgniter 4 Setup Script
 #>
 
-$main = Read-Host "Root directory name"
-$sub = Read-Host "Application directory name"
+$main = Read-Host "Root directory name {main}"
+if([string]::IsNullOrWhiteSpace($main))
+{
+	$main = 'main'
+}
+$sub = Read-Host "Application subdirectory name {sub}"
+if([string]::IsNullOrWhiteSpace($sub))
+{
+	$sub = 'sub'
+}
+$threshold
+try
+{
+	$threshold = [Int32]::Parse((Read-Host "CodeIgniter logging threshold 0 - 9 {9}"))
+	if(($threshold -lt 0) -or ($threshold -gt 9))
+	{
+		$threshold = 9
+	}
+}
+catch
+{
+	$threshold = 9
+}
+$timezone = Read-Host "CodeIgniter app timezone {America/New_York}"
+if([string]::IsNullOrWhiteSpace($timezone))
+{
+	$timezone = 'America/New_York'
+}
+
 $url = "http://localhost/$main/$sub/public"
 $log = "$(Get-Location)\$main\writable\logs"
 
@@ -23,8 +50,8 @@ cp -R .\vendor\codeigniter4\framework\public\ .\$sub\
 cp .\vendor\codeigniter4\framework\env .\$sub\.env
 
 cp -R .\vendor\codeigniter4\framework\writable\ .
-cp .\vendor\codeigniter4\framework\phpunit.xml.dist .
-cp .\vendor\codeigniter4\framework\spark .
+#cp .\vendor\codeigniter4\framework\phpunit.xml.dist .
+#cp .\vendor\codeigniter4\framework\spark .
 
 ((Get-Content -Path .\$sub\app\Config\Paths.php -Raw) -replace '/../../system', '/../../../vendor/codeigniter4/framework/system') | Set-Content -Path .\$sub\app\Config\Paths.php
 ((Get-Content -Path .\$sub\app\Config\Paths.php -Raw) -replace '/../../writable', '/../../../writable') | Set-Content -Path .\$sub\app\Config\Paths.php
@@ -32,18 +59,26 @@ cp .\vendor\codeigniter4\framework\spark .
 
 # Composer setup and additional packages install
 ((Get-Content -Path .\$sub\app\Config\Constants.php -Raw) -replace 'vendor/autoload.php', '../vendor/autoload.php') | Set-Content -Path .\$sub\app\Config\Constants.php
-php composer.phar require guzzlehttp/guzzle
-php composer.phar require caseyamcl/guzzle_retry_middleware
+
+$package = Read-Host "Composer package to install [library/package]"
+while(-not ([string]::IsNullOrWhiteSpace($package)))
+{
+	php composer.phar require $package
+	$package = Read-Host "Composer package to install {library/package}"
+}
+#php composer.phar require guzzlehttp/guzzle
+#php composer.phar require caseyamcl/guzzle_retry_middleware
 #php composer.phar require tecnickcom/tcpdf
 #php composer.phar require sendgrid/sendgrid
+
 php -r "unlink('composer.phar');"
 
 ((Get-Content -Path .\$sub\.env -Raw) -replace '# CI_ENVIRONMENT = production', 'CI_ENVIRONMENT = development') | Set-Content -Path .\$sub\.env
 ((Get-Content -Path .\$sub\.env -Raw) -replace "# app.baseURL = ''", "app.baseURL = '$url'") | Set-Content -Path .\$sub\.env
 
-((Get-Content -Path .\$sub\app\Config\Logger.php -Raw) -replace 'threshold = 4;', 'threshold = 9;') | Set-Content -Path .\$sub\app\Config\Logger.php
+((Get-Content -Path .\$sub\app\Config\Logger.php -Raw) -replace 'threshold = 4;', "threshold = $threshold;") | Set-Content -Path .\$sub\app\Config\Logger.php
 
-((Get-Content -Path .\$sub\app\Config\App.php -Raw) -replace 'America/Chicago', 'America/New_York') | Set-Content -Path .\$sub\app\Config\App.php
+((Get-Content -Path .\$sub\app\Config\App.php -Raw) -replace 'America/Chicago', $timezone) | Set-Content -Path .\$sub\app\Config\App.php
 
 ###############################
 ((Get-Content -Path .\$sub\app\Config\Routes.php -Raw) -replace 'routes->get', @"
