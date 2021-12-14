@@ -34,24 +34,32 @@ if([string]::IsNullOrWhiteSpace($timezone))
 $url = "http://localhost/$main/$sub/public"
 $log = "$(Get-Location)\$main\writable\logs"
 
-mkdir $main
-cd $main
+New-Item -Path . -Name $main -ItemType 'directory'
+Push-Location -Path $main -PassThru
 
-php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
-php -r "if (hash_file('sha384', 'composer-setup.php') === '906a84df04cea2aa72f40b5f787e49f22d4c2f19492ac310e8cba5b96ac8b64115ac402c8cd292b8a03482574915d1a8') { echo 'Installer verified'; } else { echo 'Installer corrupt'; unlink('composer-setup.php'); } echo PHP_EOL;"
+Invoke-WebRequest -Uri 'https://getcomposer.org/installer' -OutFile .\composer-setup.php
+if((Get-FileHash .\composer-setup.php -Algorithm SHA384).Hash -eq '906a84df04cea2aa72f40b5f787e49f22d4c2f19492ac310e8cba5b96ac8b64115ac402c8cd292b8a03482574915d1a8')
+{
+	Write-Host 'Installer verified'
+}
+else
+{
+	Write-Host 'Installer corrupt'
+	Remove-Item .\composer-setup.php
+}
 php composer-setup.php
-php -r "unlink('composer-setup.php');"
+Remove-Item .\composer-setup.php
 php composer.phar require codeigniter4/framework
 
-mkdir $sub
+New-Item -Path . -Name $sub -ItemType 'directory'
 
-cp -R .\vendor\codeigniter4\framework\app .\$sub\
-cp -R .\vendor\codeigniter4\framework\public\ .\$sub\
-cp .\vendor\codeigniter4\framework\env .\$sub\.env
+Copy-Item -Path .\vendor\codeigniter4\framework\app -Destination .\$sub -Recurse
+Copy-Item -Path .\vendor\codeigniter4\framework\public -Destination .\$sub -Recurse
+Copy-Item -Path .\vendor\codeigniter4\framework\env -Destination .\$sub\.env
 
-cp -R .\vendor\codeigniter4\framework\writable\ .
-#cp .\vendor\codeigniter4\framework\phpunit.xml.dist .
-#cp .\vendor\codeigniter4\framework\spark .
+Copy-Item -Path .\vendor\codeigniter4\framework\writable\ -Destination . -Recurse
+Copy-Item -Path .\vendor\codeigniter4\framework\phpunit.xml.dist -Destination .
+Copy-Item -Path .\vendor\codeigniter4\framework\spark -Destination .
 
 ((Get-Content -Path .\$sub\app\Config\Paths.php -Raw) -replace '/../../system', '/../../../vendor/codeigniter4/framework/system') | Set-Content -Path .\$sub\app\Config\Paths.php
 ((Get-Content -Path .\$sub\app\Config\Paths.php -Raw) -replace '/../../writable', '/../../../writable') | Set-Content -Path .\$sub\app\Config\Paths.php
@@ -166,7 +174,7 @@ class Home extends BaseController
 		<p>Provided by <a href="https://github.com/grimpirate/" target="_blank">GrimPirate</a></p>
 "@) | Set-Content -Path .\$sub\app\Views\welcome_message.php
 
-if((Read-Host "Configure/Create Database? [y/n]") -match "[yY]")
+if((Read-Host "Configure a database? [y/n]") -match "[yY]")
 {
 	$h = Read-Host "Host name {localhost}"
 	if([string]::IsNullOrWhiteSpace($h))
@@ -227,6 +235,8 @@ database.default.DBCollat = utf8mb4_unicode_ci
 "@
 }
 
+Pop-Location -PassThru
+
 function Format-Block
 {
 	param(
@@ -267,5 +277,3 @@ Format-Block "CodeIgniter Log(s):" $length
 Format-Block "   $log" $length
 Format-Block " " $length
 Format-Block "" $length
-
-cd ..
