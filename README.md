@@ -1,4 +1,8 @@
 # CodeIgniter 4 PowerShell Setup Script
+## Requirements
+* Windows
+* XAMPP
+* PS > Set-ExecutionPolicy RemoteSigned
 ## Usage
 Copy ci4_setup.ps1 to the *htdocs/* directory  
 Run the script to configure as described in [Managing your Applications](https://codeigniter.com/user_guide/general/managing_apps.html)
@@ -17,7 +21,3 @@ Resultant directory structure:
   composer.json
   composer.lock
 ```
-## Requirements
-* Windows
-* XAMPP
-* PS > Set-ExecutionPolicy RemoteSigned
