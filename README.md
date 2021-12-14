@@ -1,7 +1,7 @@
 # CodeIgniter 4 PowerShell Setup Script
 ## Requirements
 * Windows
-* XAMPP
+* XAMPP (Apache, MySQL, PHP)
 * PHP added to PATH
 * PS > Set-ExecutionPolicy RemoteSigned
 ## Usage
