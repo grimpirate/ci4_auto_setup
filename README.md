@@ -16,3 +16,6 @@ Resultant directory structure:
   composer.json
   composer.lock
 ```
+## Requirements
+PHP CLI
+PS > Set-ExecutionPolicy RemoteSigned
