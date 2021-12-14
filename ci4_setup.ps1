@@ -325,8 +325,12 @@ $length += 11
 
 Format-Block "" $length
 Format-Block " " $length
-Format-Block "CodeIgniter URL:" $length
-Format-Block "   $url" $length
+Format-Block "CodeIgniter URL(s):" $length
+if(-not ([string]::IsNullOrWhiteSpace($vu)))
+{
+	Format-Block "   http://$vu/" $length	
+}
+Format-Block "   $url/" $length
 Format-Block " " $length
 Format-Block "CodeIgniter Log(s):" $length
 Format-Block "   $log" $length
