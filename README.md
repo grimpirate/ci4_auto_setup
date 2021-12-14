@@ -2,6 +2,7 @@
 ## Requirements
 * Windows
 * XAMPP
+* PHP added to PATH
 * PS > Set-ExecutionPolicy RemoteSigned
 ## Usage
 Copy ci4_setup.ps1 to the *htdocs/* directory  
