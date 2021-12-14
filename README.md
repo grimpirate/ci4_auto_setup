@@ -6,8 +6,8 @@ PS > & .\ci4_setup.ps1
 ```
 Resultant directory structure:
 ```
-/root
-  /app
+/main
+  /sub
     /app
     /public
     .env
