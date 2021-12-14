@@ -1,8 +1,8 @@
 # CodeIgniter 4 PowerShell Setup Script
 ## Requirements
-* Windows
+* Windows OS
 * XAMPP (Apache, MySQL, PHP)
-* PHP added to PATH
+* php added to PATH
 * PS > Set-ExecutionPolicy RemoteSigned
 ## Usage
 Copy ci4_setup.ps1 to the *htdocs/* directory  
