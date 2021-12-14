@@ -2,7 +2,6 @@
 ## Requirements
 * Windows OS
 * XAMPP (Apache, MySQL, PHP)
-* php added to PATH
 * PS > Set-ExecutionPolicy RemoteSigned
 ## Required PHP Extensions - php.ini
 * extension=bz2
