@@ -17,5 +17,5 @@ Resultant directory structure:
   composer.lock
 ```
 ## Requirements
-PHP CLI
-PS > Set-ExecutionPolicy RemoteSigned
+* PHP CLI
+* PS > Set-ExecutionPolicy RemoteSigned
