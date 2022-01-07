@@ -18,6 +18,7 @@ if((Read-Host "Configure php.ini? [y/n]") -match "[yY]")
 	((Get-Content -Path $ini -Raw) -replace ';extension=fileinfo', 'extension=fileinfo') | Set-Content -Path $ini
 	((Get-Content -Path $ini -Raw) -replace ';extension=gettext', 'extension=gettext') | Set-Content -Path $ini
 	((Get-Content -Path $ini -Raw) -replace ';extension=intl', 'extension=intl') | Set-Content -Path $ini
+	((Get-Content -Path $ini -Raw) -replace ';extension=json', 'extension=json') | Set-Content -Path $ini
 	((Get-Content -Path $ini -Raw) -replace ';extension=mbstring', 'extension=mbstring') | Set-Content -Path $ini
 	((Get-Content -Path $ini -Raw) -replace ';extension=exif', 'extension=exif') | Set-Content -Path $ini
 	((Get-Content -Path $ini -Raw) -replace ';extension=mysqli', 'extension=mysqli') | Set-Content -Path $ini
