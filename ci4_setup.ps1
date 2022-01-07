@@ -112,9 +112,9 @@ New-Item -Path . -Name $sub -ItemType 'directory'
 
 Copy-Item -Path .\vendor\codeigniter4\framework\app -Destination .\$sub -Recurse
 Copy-Item -Path .\vendor\codeigniter4\framework\public -Destination .\$sub -Recurse
-Copy-Item -Path .\vendor\codeigniter4\framework\env -Destination .\$sub\.env
+Copy-Item -Path .\vendor\codeigniter4\framework\writable -Destination . -Recurse
 
-Copy-Item -Path .\vendor\codeigniter4\framework\writable\ -Destination . -Recurse
+Copy-Item -Path .\vendor\codeigniter4\framework\env -Destination .\$sub\.env
 Copy-Item -Path .\vendor\codeigniter4\framework\phpunit.xml.dist -Destination .
 Copy-Item -Path .\vendor\codeigniter4\framework\spark -Destination .
 
