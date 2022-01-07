@@ -105,7 +105,7 @@ else
 }
 & $php composer-setup.php
 Remove-Item .\composer-setup.php
-& $php composer.phar require codeigniter4/framework
+& $php composer.phar require codeigniter4/framework --no-dev
 
 New-Item -Path . -Name $sub -ItemType 'directory'
 
